@@ -11,6 +11,9 @@ dependencies:
   - intake::intake-xarray
   - zarr
   - matplotlib
+  - basemap
+  - proj4
+  - pyresample
   - numcodecs
   - python-blosc
   - lz4
@@ -34,6 +37,7 @@ dependencies:
   - geoviews
   - datashader
   - gsw
+  - julia
   - pip:
     - git+https://github.com/pydata/xarray.git
     - git+https://github.com/xgcm/xgcm.git
