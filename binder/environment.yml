@@ -23,6 +23,19 @@ dependencies:
   - ipywidgets
   - graphviz
   - nodejs
+  - scipy
+  - scikit-image
+  - bokeh
+  - pyviz/label/earthsim::holoviews
+  - pyviz/label/earthsim::panel
+  - geoviews
+  - hvplot
+  - rasterio
+  - geoviews
+  - datashader
+  - gsw
   - pip:
+    - git+https://github.com/pydata/xarray.git
+    - git+https://github.com/xgcm/xgcm.git
     - kubernetes
     - graphviz
