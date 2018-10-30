@@ -8,8 +8,12 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager \
 
 
 # Julia stuff
+# https://stackoverflow.com/questions/51272077/install-julia-packages-via-command-line/51273146
+# https://github.com/JuliaLang/IJulia.jl
+# https://github.com/JuliaLang/IJulia.jl/issues/717
 julia -e 'ENV["JUPYTER"]="jupyter";
           using Pkg;
-          Pkg.add(["IJulia", "MeshArrays"]);'
+          Pkg.add(["IJulia", "MeshArrays"]);
+          Pkg.build("ZMQ");'
 
 #EOF
