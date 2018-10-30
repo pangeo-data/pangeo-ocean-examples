@@ -12,6 +12,7 @@ dependencies:
   - zarr
   # https://github.com/matplotlib/basemap/issues/435
   - matplotlib=3.0.0
+  - cmocean
   - basemap
   - proj4
   - pyresample
