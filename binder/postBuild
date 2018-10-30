@@ -6,4 +6,10 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager \
                              jupyter-leaflet \
                              dask-labextension
 
+
+# Julia stuff
+julia -e 'ENV["JUPYTER"]="jupyter";
+          using Pkg;
+          Pkg.add("IJulia", "MeshArrays");'
+
 #EOF
