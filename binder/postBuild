@@ -10,6 +10,6 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager \
 # Julia stuff
 julia -e 'ENV["JUPYTER"]="jupyter";
           using Pkg;
-          Pkg.add("IJulia", "MeshArrays");'
+          Pkg.add(["IJulia", "MeshArrays"]);'
 
 #EOF
