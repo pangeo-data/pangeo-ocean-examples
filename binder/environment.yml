@@ -10,7 +10,8 @@ dependencies:
   - gcsfs
   - intake::intake-xarray
   - zarr
-  - matplotlib
+  # https://github.com/matplotlib/basemap/issues/435
+  - matplotlib=3.0.0
   - basemap
   - proj4
   - pyresample
@@ -41,5 +42,6 @@ dependencies:
   - pip:
     - git+https://github.com/pydata/xarray.git
     - git+https://github.com/xgcm/xgcm.git
+    - git+https://github.com/ContinuumIO/intake.git
     - kubernetes
     - graphviz
