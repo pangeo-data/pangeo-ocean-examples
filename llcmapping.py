@@ -1,8 +1,7 @@
 import os
 import numpy as np
 from matplotlib import pyplot as plt
-os.environ['PROJ_LIB'] = '/srv/conda/share/proj'
-from mpl_toolkits.basemap import Basemap
+import cartopy as cart
 import pyresample
 
 
@@ -26,8 +25,8 @@ class LLCMapper:
         self.new_grid  = pyresample.geometry.GridDefinition(lons=self.new_grid_lon,
                                                             lats=self.new_grid_lat)
 
-    def __call__(self, da, ax=None, projection='robin', lon_0=-60, **plt_kwargs):
-        
+    def __call__(self, da, ax=None, projection=cart.crs.PlateCarree(), lon_0=-60, **plt_kwargs):
+
         assert set(da.dims) == set(['face', 'j', 'i']), "da must have dimensions ['face', 'j', 'i']"
 
         if ax is None:
@@ -42,22 +41,19 @@ class LLCMapper:
         vmax = plt_kwargs.pop('vmax', field.max())
         vmin = plt_kwargs.pop('vmin', field.min())
 
-        m = Basemap(projection=projection, lon_0=lon_0, resolution='c')
-        x,y = m(self.new_grid_lon, self.new_grid_lat) 
-        
+        m = plt.axes(projection=projection)
+        x,y = self.new_grid_lon, self.new_grid_lat
+
         # Find index where data is splitted for mapping
         split_lon_idx = round(x.shape[1]/(360/(lon_0 if lon_0>0 else lon_0+360)))
 
-        m.fillcontinents(color='lightgrey',lake_color='lightgray')
-        m.drawcoastlines(linewidth=1)
-        m.drawmeridians(np.arange(0,360,30))
-        m.drawparallels(np.arange(-90,90,30))
 
         p = m.pcolormesh(x[:,:split_lon_idx], y[:,:split_lon_idx], field[:,:split_lon_idx],
-                         vmax=vmax, vmin=vmin, **plt_kwargs)
+                         vmax=vmax, vmin=vmin, transform=cart.crs.PlateCarree(), zorder=1, **plt_kwargs)
         p = m.pcolormesh(x[:,split_lon_idx:], y[:,split_lon_idx:], field[:,split_lon_idx:],
-                         vmax=vmax, vmin=vmin, **plt_kwargs)
+                         vmax=vmax, vmin=vmin, transform=cart.crs.PlateCarree(), zorder=2, **plt_kwargs)
 
+        m.add_feature(cart.feature.LAND, facecolor='0.5', zorder=3)
         label = ''
         if da.name is not None:
             label = da.name
