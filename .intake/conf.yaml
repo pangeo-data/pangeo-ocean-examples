@@ -1,2 +1,2 @@
 catalog_path:
-  - 'https://github.com/pangeo-data/pangeo/raw/master/gce/catalog.yaml'
+  - /home/jovyan/catalog.yaml

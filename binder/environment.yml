@@ -11,7 +11,7 @@ dependencies:
   - intake::intake-xarray
   - zarr
   # https://github.com/matplotlib/basemap/issues/435
-  - matplotlib=3.0.0
+  - matplotlib=3.0.2
   - cmocean
   - basemap
   - proj4
@@ -42,6 +42,7 @@ dependencies:
   - julia
   - pip:
     - git+https://github.com/pydata/xarray.git
+    - git+https://github.com/zarr-developers/zarr.git
     - git+https://github.com/xgcm/xgcm.git
     - git+https://github.com/ContinuumIO/intake.git
     - kubernetes
