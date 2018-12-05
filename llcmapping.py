@@ -6,9 +6,9 @@ import pyresample
 
 
 class LLCMapper:
-    
+
     def __init__(self, ds, dx=0.25, dy=0.25):
-        
+
         # Extract LLC 2D coordinates
         lons_1d = ds.XC.values.ravel()
         lats_1d = ds.YC.values.ravel()
@@ -25,14 +25,14 @@ class LLCMapper:
         self.new_grid  = pyresample.geometry.GridDefinition(lons=self.new_grid_lon,
                                                             lats=self.new_grid_lat)
 
-    def __call__(self, da, ax=None, projection=cart.crs.PlateCarree(), lon_0=-60, **plt_kwargs):
+    def __call__(self, da, ax=None, projection=cart.crs.Robinson(), lon_0=-60, **plt_kwargs):
 
         assert set(da.dims) == set(['face', 'j', 'i']), "da must have dimensions ['face', 'j', 'i']"
 
         if ax is None:
             fig, ax = plt.subplots(figsize=(12, 6))
 
-        field = pyresample.kd_tree.resample_nearest(self.orig_grid, da.values, 
+        field = pyresample.kd_tree.resample_nearest(self.orig_grid, da.values,
                                                     self.new_grid,
                                                     radius_of_influence=100000,
                                                     fill_value=None)
@@ -58,6 +58,6 @@ class LLCMapper:
         if da.name is not None:
             label = da.name
         if 'units' in da.attrs:
-            label += ' [%s]' % da.attrs['units'] 
+            label += ' [%s]' % da.attrs['units']
         cb = plt.colorbar(p, shrink=0.4, label=label)
         return m, ax
