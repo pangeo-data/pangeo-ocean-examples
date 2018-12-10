@@ -130,10 +130,90 @@ sources:
         token: anon
       consolidated: True
 
-## To be added
+  CESM_POP_hires_control:
+    description: NCAR CESM POP model run hybrid_v5_rel04_BC5_ne120_t12_pop62
+    metadata:
+      time_period: perpetual 2000
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cesm/hybrid_v5_rel04_BC5_ne120_t12_pop62'
+      storage_options:
+        token: anon
+      consolidated: True
 
-# pangeo-data/cesm/BRCP85C5CN_ne120_t12_pop62.c13b17.asdphys.001
-# pangeo-data/cesm/hybrid_v5_rel04_BC5_ne120_t12_pop62
+  CESM_POP_hires_RCP8-5:
+    description: NCAR CESM POP model run BRCP85C5CN_ne120_t12_pop62.c13b17.asdphys.001
+    metadata:
+      time_period: "2000-2050"
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cesm/BRCP85C5CN_ne120_t12_pop62.c13b17.asdphys.001'
+      storage_options:
+        token: anon
+      consolidated: True
+
+  GFDL_CM2-6_control_ocean_surface:
+    description: "GFDL CM2.6 climate model control run daily ocean surface fields"
+    metadata:
+      url: 'https://www.gfdl.noaa.gov/cm2-6/'
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cm2.6/control/surface_daily'
+      storage_options:
+        token: anon
+      consolidated: True
+
+  GFDL_CM2-6_control_ocean_3D:
+    description: "GFDL CM2.6 climate model control run 5-day-average 3D ocean fields"
+    metadata:
+      url: 'https://www.gfdl.noaa.gov/cm2-6/'
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cm2.6/control/temp_salt_u_v-5day_avg'
+      storage_options:
+        token: anon
+      consolidated: True
+
+  GFDL_CM2-6_one-percent_ocean_surface:
+    description: "GFDL CM2.6 climate model one-percent CO2 increase ocean surface fields"
+    metadata:
+      url: 'https://www.gfdl.noaa.gov/cm2-6/'
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cm2.6/one_percent/surface_daily'
+      storage_options:
+        token: anon
+      consolidated: True
+
+  GFDL_CM2-6_one-percent_ocean_3D:
+    description: "GFDL CM2.6 climate model one-percent CO2 increase run 5-day-average 3D ocean fields"
+    metadata:
+      url: 'https://www.gfdl.noaa.gov/cm2-6/'
+      tags:
+        - ocean
+        - model
+    driver: zarr
+    args:
+      urlpath: 'gcs://pangeo-data/cm2.6/control/temp_salt_u_v-5day_avg'
+      storage_options:
+        token: anon
+      consolidated: True
+
 # pangeo-data/cm2.6/control/surface_daily
 # pangeo-data/cm2.6/control/temp_salt_u_v-5day_avg
 # pangeo-data/cm2.6/one_percent/surface_daily
