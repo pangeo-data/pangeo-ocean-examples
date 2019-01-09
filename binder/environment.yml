@@ -1,7 +1,9 @@
 name: pangeo
 channels:
   - conda-forge
+  - defaults
 dependencies:
+  - llvm
   - python=3.6
   - xarray
   - dask
