@@ -49,3 +49,4 @@ dependencies:
     - git+https://github.com/ContinuumIO/intake.git
     - kubernetes
     - graphviz
+    - dask_labextension
