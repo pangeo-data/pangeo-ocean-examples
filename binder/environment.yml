@@ -1,7 +1,9 @@
 name: pangeo
 channels:
   - conda-forge
+  - defaults
 dependencies:
+  - llvm
   - python=3.6
   - xarray
   - dask
@@ -47,3 +49,4 @@ dependencies:
     - git+https://github.com/ContinuumIO/intake.git
     - kubernetes
     - graphviz
+    - dask_labextension
