@@ -1,0 +1,202 @@
+version: 2
+jobs:
+
+  # If you want to deploy your container to Docker Hub, you must
+  # define environment variables in the CircleCI web interface for your project
+  #  1. define the CONTAINER_NAME environment variable for the project
+  #     Specifically, this is the name of the Docker Hub <ORG>/<NAME> to push
+  #     If not defined, will use the repository that is being built from.
+  #     to in the case that you have provided Docker credentials.
+  #  2. Define DOCKER_USER and DOCKER_PASS (for push to Docker Hub, if wanted)
+  #     If you don't define these in CircleCI settings it won't be pushed.
+  #  3. Optionally define the DOCKER_TAG. If not defined, will use
+  #     the commit associated with the build.
+  #  4. By default, the build assumes wanting to use the local notebook here.
+  #     If you want to build from a **different** Github repository, then define
+  #     the variable REPO_NAME as the name of the repository that you
+  #     want to build. That can be done in this file under build:environment,
+  #     or again online in the CircleCI environment variable settings.
+  setup:
+    environment:
+      - TZ: "/usr/share/zoneinfo/America/Los_Angeles"
+    docker:
+      - image: docker:18.01.0-ce-git
+      - image: circleci/python:3.6.1
+    steps:
+      - run:
+          name: Test if the user has defined the repository name
+          command: apk add --no-cache pigz python3
+
+  build:
+    environment:
+      - TZ: "/usr/share/zoneinfo/America/Los_Angeles"
+    docker:
+      - image: docker:18.01.0-ce-git
+    working_directory: /tmp/src
+    steps:
+      - run:
+          name: Install parallel gzip and python3
+          command: apk add --no-cache pigz python3
+      - restore_cache:
+          keys:
+            - docker-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}
+          paths:
+            - /tmp/cache/container.tar.gz
+      - restore_cache:
+          key: dependency-cache-repo2docker
+      - checkout
+      - run:
+          name: Git submodules
+          command: git submodule update --init --recursive
+      - setup_remote_docker
+      - run:
+          name: Load Docker image layer cache
+          no_output_timeout: 30m
+          command: |
+            docker info
+            set +o pipefail
+            if [ -f /tmp/cache/container.tar.gz ]; then
+              pigz -d --stdout /tmp/cache/container.tar.gz | docker load
+            fi
+            docker images
+      - run:
+          name: Run jupyter-repo2docker to generate Docker Container
+          no_output_timeout: 60m
+          command: |
+            echo "0. Installing dependencies..."
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install jupyter-repo2docker
+            export VERSION=$(python3 -c "import repo2docker; print(repo2docker.__version__)")
+            echo "repo2docker version: ${VERSION}"
+            echo "1. Preparing building environment"
+            echo "Working directory is ${PWD}"
+            # If not set, define DOCKER_TAG
+            if [ ! -n "${DOCKER_TAG:-}" ]
+                then
+                    DOCKER_TAG=$(echo "${CIRCLE_SHA1}" | cut -c1-10)
+            fi
+            # If not set, define CONTAINER_NAME
+            if [ ! -n "${CONTAINER_NAME:-}" ]
+                then
+                    CONTAINER_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            fi
+            echo "Container name is ${CONTAINER_NAME}"
+            # If not set, define REPO_NAME
+            if [ ! -n "${REPO_NAME:-}" ]
+                then
+                    LOCAL_REPO="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+                    REPO_NAME=/tmp/src
+                    echo "Repository name (REPO_NAME) is not defined, will build ${LOCAL_REPO} in ${REPO_NAME}"
+                    ls ${REPO_NAME}
+            else
+                echo "Repository name found defined for build: ${REPO_NAME}"
+            fi
+            echo "2. Running jupyter-repo2docker..."
+            set -x
+            if docker pull "${CONTAINER_NAME}:${DOCKER_TAG}"; then
+              jupyter-repo2docker --debug --user-name jovyan --user-id 1000 --no-run --image-name "${CONTAINER_NAME}:${DOCKER_TAG}" --cache-from "${CONTAINER_NAME}:${DOCKER_TAG}" "${REPO_NAME}"
+            else
+              jupyter-repo2docker --debug --user-name jovyan --user-id 1000 --no-run --image-name "${CONTAINER_NAME}:${DOCKER_TAG}" "${REPO_NAME}"
+            fi
+            docker ps
+            docker images
+      - run:
+          name: Docker Save
+          no_output_timeout: 40m
+          command: |
+            # If not set, use commit id as tag
+            if [ ! -n "${DOCKER_TAG:-}" ]
+                then
+                    DOCKER_TAG=$(echo "${CIRCLE_SHA1}" | cut -c1-10)
+            fi
+            # If not set, define CONTAINER_NAME
+            if [ ! -n "${CONTAINER_NAME:-}" ]
+                then
+                    CONTAINER_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            fi
+            echo "Saving ${CONTAINER_NAME}:${DOCKER_TAG} to container.tar.gz"
+            mkdir -p /tmp/cache
+            docker save ${CONTAINER_NAME}:${DOCKER_TAG} \
+              $(docker history -q ${CONTAINER_NAME}:${DOCKER_TAG} | tr -d '<missing>') \
+              | pigz -2 -p 3 > /tmp/cache/container.tar.gz
+      - persist_to_workspace:
+          root: /tmp
+          paths:
+            - cache/container.tar.gz
+            - src
+
+  update_cache:
+    machine:
+      # Ubuntu 14.04 with Docker 17.10.0-ce
+      image: circleci/classic:201711-01
+    working_directory: /tmp/src
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - save_cache:
+         key: docker-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}
+         paths:
+            - /tmp/cache/container.tar.gz
+
+  deploy:
+    machine:
+      image: circleci/classic:201711-01
+    working_directory: /tmp/src
+    steps:
+      - attach_workspace:
+          at: /tmp
+      - run:
+          name: Load Docker image layer cache
+          no_output_timeout: 30m
+          command: |
+            echo "Working directory is ${PWD}"
+            docker info
+            set +o pipefail
+            if [ -f /tmp/cache/container.tar.gz ]; then
+              sudo apt update && sudo apt -y install pigz
+              pigz -d --stdout /tmp/cache/container.tar.gz | docker load
+              docker images
+            fi
+      - run:
+          name: Deploy to Docker Hub
+          no_output_timeout: 40m
+          command: |
+            echo "Looking for Docker deployment options"
+            if [ ! -n "${DOCKER_TAG:-}" ]
+                then
+                    DOCKER_TAG=$(echo "${CIRCLE_SHA1}" | cut -c1-10)
+            fi
+            # If not set, define CONTAINER_NAME
+            if [[ ! -n "${CONTAINER_NAME:-}" ]]
+                then
+                    CONTAINER_NAME="${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            fi
+            echo "Container name set to ${CONTAINER_NAME}:${DOCKER_TAG}"
+            if [[ -n "$DOCKER_PASS" ]]; then
+                  docker login -u $DOCKER_USER -p $DOCKER_PASS
+                  docker push ${CONTAINER_NAME}:${DOCKER_TAG}
+            fi
+workflows:
+  version: 2
+  build_deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+
+      - update_cache:
+          filters:
+            tags:
+              only: /.*/
+          requires:
+            - build
+
+      # This is where we upload the container to some final resting spot :)
+      - deploy:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
