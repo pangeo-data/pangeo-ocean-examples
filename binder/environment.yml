@@ -1,4 +1,4 @@
-name: pangeo
+name: root
 channels:
   - conda-forge
   - defaults
