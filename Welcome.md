@@ -1,15 +1,21 @@
-ocean.pangeo.io
-===============
+# ocean.pangeo.io
 
-<img src="https://pangeo.io/_images/small_e_logo_cropped.png" width="20%" align="right">
+Welcome to ocean.pangeo.io, a cloud based JupyterHub operated by the [Pangeo project](http://pangeo.io). This hub is supported by an award from the NSF EarthCube program and by Google Cloud, who contributed credits via NSF's [BIGDATA program](https://www.nsf.gov/news/news_summ.jsp?cntn_id=244450).
 
-Welcome to ocean.pangeo.io. This JupyteHub lives in Google Cloud region
-`us-central1-b`. It is maintained by the [Pangeo project](http://pangeo.io) and
-supported by a grant from the National Science Foundation (NSF award 1740648),
-which includes a direct award of cloud credits from Google Cloud. The hub's
-configuration is stored in the github repository:
-<https://github.com/pangeo-data/pangeo-cloud-federation>.
-To provide feedback and report any technical problems, please use the
-[github issue tracker](https://github.com/pangeo-data/pangeo-cloud-federation//issues)
+## Logging in
 
-Your home directory has been automatically populated with example notebooks.
+Authentication is based on your ORCID ID via Globus.
+
+## Getting Help
+
+- Mailing list: general questions about this resource or Pangeo
+- Gitter: live chat with other users of the cluster
+- [Github Issues](https://github.com/pangeo-data/pangeo-cloud-federation/issues): report bugs and other technical problems with the cluster. (Note: for questions and bug reports related to specific python packages like xarray, your should go directly to that package's github repository.)
+
+## Datasets
+
+Where to find the data?
+
+## Dask Clusters
+
+Start a dask cluster right from JupyterLab!
