@@ -2,6 +2,8 @@
 Pangeo Ocean Examples
 =====================
 
+|CircleCI| |Binder|
+
 Examples of analysis of ocean observations and simulation outputs using xarray, xgcm, and pangeo.
 
 Try these notebooks on pangeo.binder.io_ : |Binder|
@@ -18,3 +20,5 @@ Features
 .. |Binder| image:: http://binder.pangeo.io/badge.svg
     :target: http://binder.pangeo.io/v2/gh/pangeo-data/pangeo_ocean_examples/master
 
+.. |CircleCI| image:: https://circleci.com/gh/pangeo-data/pangeo_ocean_examples.svg?style=svg
+    :target: https://circleci.com/gh/pangeo-data/pangeo_ocean_examples
