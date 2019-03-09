@@ -1,23 +1,15 @@
-Welcome To Pangeo Binder
-========================
+ocean.pangeo.io
+===============
 
-<img src="https://pangeo.io/_images/small_e_logo_cropped.png" width="30%" align="right">
+<img src="https://pangeo.io/_images/small_e_logo_cropped.png" width="20%" align="right">
 
-This is a live session from which you can run scalable notebooks on the cloud.
+Welcome to ocean.pangeo.io. This JupyteHub lives in Google Cloud region
+`us-central1-b`. It is maintained by the [Pangeo project](http://pangeo.io) and
+supported by a grant from the National Science Foundation (NSF award 1740648),
+which includes a direct award of cloud credits from Google Cloud. The hub's
+configuration is stored in the github repository:
+<https://github.com/pangeo-data/pangeo-cloud-federation>.
+To provide feedback and report any technical problems, please use the
+[github issue tracker](https://github.com/pangeo-data/pangeo-cloud-federation//issues)
 
-A file browser listing example notebooks is available to the left.
-
-Dask dashboard plots are available to the right.  
-These will activate when you launch a Dask cluster and start doing work.
-(these cells are already written for you).
-
-To get started, double click on one of the notebooks to the left,
-and start running through the Jupyter notebook cells.
-
-
-Where is this running?
-----------------------
-
-This session is running on [binder.pangeo.io](https://binder.pangeo.io),
-a service designed and maintained by the [Pangeo community](https://pangeo.io) for scalable earth science.
-It is running on Google Cloud Platform using credits generously donated by Google to that Community.
+Your home directory has been automatically populated with example notebooks.

@@ -12,8 +12,8 @@ dependencies:
   - gcsfs
   - intake::intake-xarray
   - zarr
-  # https://github.com/matplotlib/basemap/issues/435
-  - matplotlib=3.0.2
+  - matplotlib
+  - metpy
   - cmocean
   - basemap
   - proj4
@@ -24,7 +24,7 @@ dependencies:
   - nomkl
   - nbserverproxy
   - jupyter
-  - jupyterlab=0.35
+  - jupyterlab
   - jupyterlab_launcher
   - jupyter_client
   - ipywidgets
@@ -37,16 +37,17 @@ dependencies:
   - pyviz/label/earthsim::panel
   - geoviews
   - hvplot
-  - rasterio
+  - rasterio>1.0.0
   - geoviews
   - datashader
   - gsw
   - julia
+  - kubernetes
   - pip:
     - git+https://github.com/pydata/xarray.git
     - git+https://github.com/zarr-developers/zarr.git
     - git+https://github.com/xgcm/xgcm.git
     - git+https://github.com/ContinuumIO/intake.git
-    - kubernetes
     - graphviz
     - dask_labextension
+    - nbgitpuller
