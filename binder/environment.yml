@@ -41,7 +41,6 @@ dependencies:
   - geoviews
   - datashader
   - gsw
-  - julia
   - kubernetes
   - pip:
     - git+https://github.com/pydata/xarray.git

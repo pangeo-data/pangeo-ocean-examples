@@ -5,20 +5,3 @@ jupyter labextension install @jupyter-widgets/jupyterlab-manager \
                              @pyviz/jupyterlab_pyviz \
                              jupyter-leaflet \
                              dask-labextension
-
-# Julia stuff
-# https://stackoverflow.com/questions/51272077/install-julia-packages-via-command-line/51273146
-# https://github.com/JuliaLang/IJulia.jl
-# https://github.com/JuliaLang/IJulia.jl/issues/717
-# https://github.com/conda-forge/julia-feedstock/issues/60
-# https://github.com/pangeo-data/pangeo/issues/506#issuecomment-452362058
-
-find $CONDA_DIR/lib/ -name "libLLVM*" -exec ln -s {} $CONDA_DIR/lib/libLLVM.so \;
-ls -l $CONDA_DIR/lib/libLLVM.so
-juliacmd=`echo 'ENV["LD_LIBRARY_PATH"]="CONDA_PREFIX/lib"' |sed "s%CONDA_PREFIX%${CONDA_PREFIX}%";`
-juliacmd=$juliacmd';ENV["JUPYTER"]="jupyter"; using Pkg; Pkg.add(["IJulia", "MeshArrays"]); Pkg.build("ZMQ");'
-
-echo $juliacmd
-julia -e "$juliacmd"
-
-#EOF
