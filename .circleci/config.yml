@@ -66,7 +66,9 @@ jobs:
             echo "0. Installing dependencies..."
             python3 -m venv venv
             . venv/bin/activate
-            pip install jupyter-repo2docker
+            # pip install jupyter-repo2docker
+            # need to install master to get latest julia capabilities
+            pip install git+https://github.com/jupyter/repo2docker.git@8dfd400c779763d0051975454050f22c1f19daf0
             export VERSION=$(python3 -c "import repo2docker; print(repo2docker.__version__)")
             echo "repo2docker version: ${VERSION}"
             echo "1. Preparing building environment"
