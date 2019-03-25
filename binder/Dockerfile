@@ -1,6 +1,9 @@
 # Note that there must be a tag
 FROM pangeo/pangeo-ocean:2019.03.12
 
+RUN conda install -y -c conda-forge dask==1.0.0
+RUN conda clean -tipsy
+
 # this should get upstreamed
 RUN pip install eofs
 
