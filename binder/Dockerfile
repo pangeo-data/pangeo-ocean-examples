@@ -1,5 +1,5 @@
 # Note that there must be a tag
-FROM pangeo/pangeo-notebook:2019.04.19
+FROM pangeo/pangeo-notebook:2019.05.23
 
 # this should get upstreamed
 RUN pip install eofs
